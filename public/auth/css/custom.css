@@ -1,0 +1,55 @@
+.showPassword {
+    border-top-right-radius: 6px !important;
+    border-bottom-right-radius: 6px !important;
+}
+
+.swal2-title {
+    font-size: 17px !important;
+    line-height: 40px;
+    font-family: Georgia, serif !important;
+}
+.swal-container {
+    z-index: 99999;
+}
+
+.icon-demo-content {
+    color: #adb5bd;
+}
+.icon-demo-content i {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 36px;
+    font-size: 22px;
+    color: #6c757d;
+    border: 2px solid #f1f5f7;
+    border-radius: 4px;
+    -webkit-transition: all 0.4s;
+    transition: all 0.4s;
+    text-align: center;
+    margin-right: 16px;
+    vertical-align: middle;
+}
+.icon-demo-content .col-lg-4 {
+    margin-top: 24px;
+}
+.icon-demo-content .col-lg-4:hover i {
+    color: #fff;
+    background-color: #0f9cf3;
+    border-color: #0f9cf3;
+}
+
+/* datatables */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0px;
+    margin-left: 3px;
+    display: inline;
+    border: 0px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
+
+.dataTables_length,
+.dataTables_filter {
+    margin-bottom: 8px;
+}
