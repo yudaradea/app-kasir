@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'foto',
         'password',
     ];
 
@@ -42,4 +43,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getFotoAttribute($value) {
+        if($value) {
+            return asset("uploads/user_images/" . $value);
+        } else {
+            return asset("uploads/user_images/default-image.png");
+        }
+
+    }
 }

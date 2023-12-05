@@ -27,6 +27,8 @@
         href="{{ asset('assets/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
     <!-- Toaster -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <!-- Ijabo -->
+    <link rel="stylesheet" href="{{ asset('assets/ijabo/ijaboCropTool.min.css') }}">
 
     <!-- Daterange picker -->
     <link rel="stylesheet" href="{{ asset('assets/bower_components/bootstrap-daterangepicker/daterangepicker.css') }}">
@@ -103,6 +105,8 @@
     <script src="{{ asset('assets/bower_components/chart.js/Chart.js') }}"></script>
     <!-- Toaster -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- Toaster -->
+    <script src="{{ asset('assets/ijabo/ijaboCropTool.min.js') }}"></script>
 
     <!-- AdminLTE App -->
     <script src="{{ asset('assets/dist/js/adminlte.min.js') }}"></script>
@@ -111,6 +115,7 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ asset('assets/dist/js/pages/dashboard2.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
+    @stack('scripts')
     <script src="{{ asset('assets/dist/js/demo.js') }}"></script>
 
     <script>
