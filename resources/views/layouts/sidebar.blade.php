@@ -19,8 +19,8 @@
                     <i class="fa fa-cube"></i> <span>Kategori</span>
                 </a>
             </li>
-            <li class="">
-                <a href="#">
+            <li class="@if (request()->is('product')) ? active : '' @endif"">
+                <a href="{{ route('product.index') }}">
                     <i class="fa fa-cubes"></i> <span>Produk</span>
                 </a>
             </li>

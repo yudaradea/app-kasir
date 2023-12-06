@@ -4,12 +4,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Category
+            Product
             <small>Control panel</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">Category</li>
+            <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Product</li>
         </ol>
     </section>
 
@@ -20,20 +20,26 @@
                 <div class="box">
                     <div class="box-header with-border">
                         <div class="col-xs-6">
-                            <p style="font-size: 22px">List Category</p>
+                            <p style="font-size: 22px">List Product</p>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <button onclick="addForm('{{ route('category.store') }}')"
-                                class="btn btn-primary xs btn-flat"><i class="fa fa-plus-circle"
-                                    style="margin-right: 6px"></i>Tambah
-                                Category</button>
+                            <button onclick="addForm('{{ route('product.store') }}')" class="btn btn-primary xs btn-flat"><i
+                                    class="fa fa-plus-circle" style="margin-right: 6px"></i>Tambah
+                                Product</button>
                         </div>
                     </div>
                     <div class="box-body table-responsive">
                         <table class="table table-striped table-bordered" role="grid">
                             <thead class="text-center">
                                 <th width="5%">No</th>
-                                <th>Kategory</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Kategori</th>
+                                <th>Merk</th>
+                                <th>Harga Beli</th>
+                                <th>Harga Jual</th>
+                                <th>Diskon</th>
+                                <th>Stok</th>
                                 <th width="15%">Aksi</th>
                             </thead>
                             <tbody></tbody>
@@ -45,9 +51,9 @@
     </section>
     <!-- /.content -->
 
-    @includeIf('pages.category.form')
+    @includeIf('pages.product.form')
 @endsection
-@push('style')
+{{-- @push('style')
     <style>
         .modal-dialog {
             margin-top: 0;
@@ -66,7 +72,7 @@
             transform: translate(0, 0);
         }
     </style>
-@endpush
+@endpush --}}
 
 @push('scripts')
     <script>
@@ -82,7 +88,7 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('category') }}",
+                ajax: "{{ route('product.index') }}",
                 columns: [
 
                     {
@@ -90,9 +96,39 @@
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
-                    }, {
-                        data: 'nama_kategori',
-                        name: 'nama_kategori'
+                    },
+                    {
+                        data: 'kode_produk',
+
+                    },
+                    {
+                        data: 'nama_produk',
+
+                    },
+                    {
+                        data: 'id_kategory',
+
+                    },
+                    {
+                        data: 'merk',
+
+                    },
+
+                    {
+                        data: 'harga_beli',
+
+                    },
+                    {
+                        data: 'harga_jual',
+
+                    },
+                    {
+                        data: 'diskon',
+
+                    },
+                    {
+                        data: 'stok',
+
                     },
                     {
                         data: 'aksi',
@@ -125,6 +161,8 @@
                                             0] +
                                         '</p>'));
                                 });
+                            } else {
+                                alert('tidak dapat menambah data');
                             }
                             return;
                         });
@@ -134,12 +172,12 @@
 
         function addForm(url) {
             $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Tambah Kategori');
+            $('#modal-form .modal-title').text('Tambah Produk');
 
             $('#modal-form form')[0].reset();
             $('#modal-form form').attr('action', url);
             $('#modal-form form [name_method]').val('post');
-            $('#modal-form form [name=nama_kategori]').focus();
+            $('#modal-form form [name=nama_produk]').focus();
         }
 
         function editForm(url) {
@@ -149,7 +187,7 @@
             $('#modal-form form')[0].reset();
             $('#modal-form form').attr('action', url);
             $('#modal-form [name_method]').val('patch');
-            $('#modal-form form [name=nama_kategori]').focus();
+            $('#modal-form form [name=nama_produk]').focus();
 
             $.get(url)
                 .done((response) => {

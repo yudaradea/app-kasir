@@ -39,3 +39,7 @@ function tanggal_indonesia($tanggal)
         "D MMMM Y"
     );
 }
+
+function tambah_nol_didepan($value, $thresold = null) {
+    return sprintf("%0". $thresold. "s", $value);
+}

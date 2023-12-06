@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
@@ -40,9 +41,14 @@ Route::middleware('auth')->group(function () {
     // Category Controller
     Route::controller(CategoryController::class)->group(function () {
         Route::get('/category', 'index')->name('category');
-        Route::get('/category/data', 'data')->name('category-data');
-        Route::post('/category/post', 'store')->name('category-store');
+        Route::get('/category/{id}', 'show')->name('category.show');
+        Route::post('/category', 'store')->name('category.store');
+        Route::post('/category/{id}', 'update')->name('category.update');
+        Route::delete('/category/{id}', 'destroy')->name('category.destroy');
     });
+
+    Route::get('/product/data', [ProductController::class, 'data'])->name('produk-data');
+    Route::resource('/product', ProductController::class);
 });
 
 require __DIR__ . '/auth.php';
