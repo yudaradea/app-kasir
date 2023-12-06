@@ -16,20 +16,20 @@ class CategoryController extends Controller
         if ($request->ajax()) {
             $data = Category::orderBy('id', 'desc');
             return Datatables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('aksi', function($data){
-                        return '
-                         <button onclick="editForm(`'. route('category.update', $data->id) .'`)" class="btn btn-info"><i class="fa fa-edit"></i></button>
-                         <button onclick="deleteData(`'. route('category.destroy', $data->id) .'`)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                ->addIndexColumn()
+                ->addColumn('aksi', function ($data) {
+                    return '
+                         <button onclick="editForm(`' . route('category.update', $data->id) . '`)" class="btn btn-xs btn-info"><i class="fa fa-edit"></i></button>
+                         <button onclick="deleteData(`' . route('category.destroy', $data->id) . '`)" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>
                         ';
-                    })
-                    ->rawColumns(['aksi'])
-                    ->make(true);
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
         }
         return view('pages.category.category');
     }
 
-  
+
 
     /**
      * Show the form for creating a new resource.
@@ -91,7 +91,7 @@ class CategoryController extends Controller
             'nama_kategori.unique' => 'nama kategori sudah ada dalam database'
 
         ]);
-        
+
         $kategori = Category::find($id);
         $kategori->nama_kategori = $request->nama_kategori;
         $kategori->update();
@@ -111,6 +111,5 @@ class CategoryController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
-        
     }
 }

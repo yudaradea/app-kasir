@@ -40,7 +40,7 @@
                                 <th>Harga Jual</th>
                                 <th>Diskon</th>
                                 <th>Stok</th>
-                                <th width="15%">Aksi</th>
+                                <th width="10%">Aksi</th>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -53,7 +53,7 @@
 
     @includeIf('pages.product.form')
 @endsection
-{{-- @push('style')
+@push('style')
     <style>
         .modal-dialog {
             margin-top: 0;
@@ -72,7 +72,7 @@
             transform: translate(0, 0);
         }
     </style>
-@endpush --}}
+@endpush
 
 @push('scripts')
     <script>
@@ -106,7 +106,7 @@
 
                     },
                     {
-                        data: 'id_kategory',
+                        data: 'nama_kategori',
 
                     },
                     {
@@ -176,22 +176,29 @@
 
             $('#modal-form form')[0].reset();
             $('#modal-form form').attr('action', url);
-            $('#modal-form form [name_method]').val('post');
+            $('#modal-form form [name=_method]').val('post');
             $('#modal-form form [name=nama_produk]').focus();
         }
 
         function editForm(url) {
             $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Edit Kategori');
+            $('#modal-form .modal-title').text('Edit Produk');
 
             $('#modal-form form')[0].reset();
             $('#modal-form form').attr('action', url);
-            $('#modal-form [name_method]').val('patch');
+            $('#modal-form [name=_method]').val('patch');
             $('#modal-form form [name=nama_produk]').focus();
 
             $.get(url)
                 .done((response) => {
-                    $('#modal-form form [name=nama_kategori]').val(response.nama_kategori);
+                    $('#modal-form form [name=nama_produk]').val(response.nama_produk);
+                    $('#modal-form form [name=id_kategory]').val(response.id_kategory);
+                    $('#modal-form form [name=merk]').val(response.merk);
+                    $('#modal-form form [name=harga_beli]').val(response.harga_beli);
+                    $('#modal-form form [name=harga_jual]').val(response.harga_jual);
+                    $('#modal-form form [name=diskon]').val(response.diskon);
+                    $('#modal-form form [name=stok]').val(response.stok);
+
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menampilkan data');
@@ -207,7 +214,7 @@
 
             $.get(url)
                 .done((response) => {
-                    $('#modal-form-delete form [name=nama_kategori]').text(response.nama_kategori);
+                    $('#modal-form-delete form [name=nama_produk]').text(response.nama_produk);
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menampilkan data');

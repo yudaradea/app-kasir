@@ -3,7 +3,7 @@
     <div class="modal-dialog " role="document">
         <form action="" method="POST">
             @csrf
-
+            @method('post')
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -79,7 +79,7 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        <p>Hapus kategori <b name="nama_kategori"></b>?</p>
+                        <p>Hapus kategori <b name="nama_produk"></b>?</p>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -15,24 +15,35 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-         
+
         if ($request->ajax()) {
-            $data = Product::orderBy('id', 'desc');
+            $data = Product::leftJoin('categories', 'categories.id', 'products.id_kategory')
+                ->select('products.*', 'nama_kategori')
+                ->orderBy('kode_produk', 'asc')
+                ->get();
             return Datatables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('aksi', function($data){
-                        return '
-                         <button onclick="editForm(`'. route('product.update', $data->id) .'`)" class="btn btn-info"><i class="fa fa-edit"></i></button>
-                         <button onclick="deleteData(`'. route('product.destroy', $data->id) .'`)" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                ->addIndexColumn()
+                ->addColumn('harga_beli', function ($data) {
+                    return "Rp" . format_uang($data->harga_beli);
+                })
+                ->addColumn('harga_jual', function ($data) {
+                    return "Rp" . format_uang($data->harga_jual);
+                })
+                ->addColumn('stok', function ($data) {
+                    return format_uang($data->stok);
+                })
+                ->addColumn('aksi', function ($data) {
+                    return '
+                         <button onclick="editForm(`' . route('product.update', $data->id) . '`)" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></button>
+                         <button onclick="deleteData(`' . route('product.destroy', $data->id) . '`)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                         ';
-                    })
-                    ->rawColumns(['aksi'])
-                    ->make(true);
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
         }
 
         $kategori = Category::all()->pluck('nama_kategori', 'id');
         return view('pages.product.index', compact('kategori'));
-    
     }
 
     /**
@@ -62,7 +73,10 @@ class ProductController extends Controller
 
         ]);
 
-       
+        $kode_produk = IdGenerator::generate(['table' => 'products', 'field' => 'kode_produk', 'length' => 7, 'prefix' => "P", 'reset_on_prefix_change' => true]);
+
+        $request['kode_produk'] = $kode_produk;
+
         Product::create($request->all());
 
         return response()->json('Data berhasil disimpan', 200);
@@ -73,7 +87,9 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $produk = Product::find($id);
+
+        return response()->json($produk);
     }
 
     /**
@@ -89,7 +105,25 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $produk = Product::find($id);
+        $validateData = $request->validate([
+            'nama_produk' => 'required|max:50|unique:products,nama_produk,' . $produk->id,
+            'id_kategory' => 'required',
+            'merk' => 'required',
+            'harga_beli' => 'required',
+            'harga_jual' => 'required',
+
+
+        ], [
+            'nama_produk.required' => 'nama produk tidak boleh kosong',
+            'nama_produk.unique' => 'nama produk sudah ada dalam database'
+
+        ]);
+
+
+        $produk->update($request->all());
+
+        return response()->json('Data berhasil diubah', 200);
     }
 
     /**
@@ -97,6 +131,12 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Product::find($id)->delete();
+
+        $notification = array(
+            'message' => 'kategori berhasil dihapus',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
     }
 }
