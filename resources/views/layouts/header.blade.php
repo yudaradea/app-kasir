@@ -33,7 +33,7 @@
                                 @else
                                     Kasir
                                 @endif
-                                <small>Member since {{ tanggal_indonesia(auth()->user()->created_at) }}</small>
+                                <small>{{ auth()->user()->email }}</small>
                             </p>
                         </li>
 
@@ -51,6 +51,7 @@
                         </li>
                     </ul>
                 </li>
+
 
             </ul>
         </div>

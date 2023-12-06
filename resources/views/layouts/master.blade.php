@@ -35,6 +35,11 @@
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
 
+    <!-- data tables -->
+    <link rel="stylesheet"
+        href="{{ asset('assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+
+    @stack('style')
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -66,7 +71,7 @@
 
         <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
+
     </div>
     <!-- ./wrapper -->
 
@@ -105,8 +110,11 @@
     <script src="{{ asset('assets/bower_components/chart.js/Chart.js') }}"></script>
     <!-- Toaster -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <!-- Toaster -->
+    <!-- Ijabo -->
     <script src="{{ asset('assets/ijabo/ijaboCropTool.min.js') }}"></script>
+    <!-- Data tables -->
+    <script src="{{ asset('assets/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 
     <!-- AdminLTE App -->
     <script src="{{ asset('assets/dist/js/adminlte.min.js') }}"></script>
@@ -114,10 +122,12 @@
     <script src="{{ asset('assets/dist/js/pages/dashboard.js') }}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ asset('assets/dist/js/pages/dashboard2.js') }}"></script>
+
     <!-- AdminLTE for demo purposes -->
-    @stack('scripts')
     <script src="{{ asset('assets/dist/js/demo.js') }}"></script>
 
+    <!-- Validator -->
+    <script src="{{ asset('validator.min.js') }}"></script>
     <script>
         @if (Session::has('message'))
             toastr.options = {
@@ -146,7 +156,7 @@
             }
         @endif
     </script>
-
+    @stack('scripts')
 </body>
 
 </html>

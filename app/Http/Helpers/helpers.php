@@ -36,6 +36,6 @@ function terbilang($angka)
 function tanggal_indonesia($tanggal)
 {
     return Carbon::createFromFormat("Y-m-d H:i:s", $tanggal)->isoFormat(
-        "dddd, D MMMM Y"
+        "D MMMM Y"
     );
 }

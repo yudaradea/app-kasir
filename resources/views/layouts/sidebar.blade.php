@@ -8,14 +8,14 @@
         <ul class="sidebar-menu" data-widget="tree">
 
             <li class="header">MAIN NAVIGATION</li>
-            <li class="active">
-                <a href="#">
+            <li class="@if (request()->is('/')) ? active : '' @endif">
+                <a href="/">
                     <i class="fa fa-home"></i> <span>Dashboard</span>
                 </a>
             </li>
 
-            <li class="">
-                <a href="#">
+            <li class="@if (request()->is('category')) ? active : '' @endif">
+                <a href="{{ route('category') }}">
                     <i class="fa fa-cube"></i> <span>Kategori</span>
                 </a>
             </li>

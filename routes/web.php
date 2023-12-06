@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserProfileController;
@@ -21,20 +22,27 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Logout
-    Route::get('/logout', [UserProfileController::class, 'destroy'])->name('user-logout');
-    // Profile
-    Route::get('/profile', [UserProfileController::class, 'index'])->name('profile');
-    Route::post('/profile/change-profile', [UserProfileController::class, 'changeProfile'])->name('change-profile');
-    Route::post('/profile/change-password', [UserProfileController::class, 'updatePassword'])->name('change-password');
-    Route::post('/profile/change-profile-picture', [UserProfileController::class, 'changeProfilePicture'])->name('change-profile-picture');
+
+
+    // User Profile Controller
+    Route::controller(UserProfileController::class)->group(function () {
+        // Logout
+        Route::get('/logout',  'destroy')->name('user-logout');
+        // Profile
+        Route::get('/profile',  'index')->name('profile');
+        Route::post('/profile/change-profile',  'changeProfile')->name('change-profile');
+        Route::post('/profile/change-password',  'updatePassword')->name('change-password');
+        Route::post('/profile/change-profile-picture',  'changeProfilePicture')->name('change-profile-picture');
+    });
+    // Category Controller
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/category', 'index')->name('category');
+        Route::get('/category/data', 'data')->name('category-data');
+        Route::post('/category/post', 'store')->name('category-store');
+    });
 });
 
 require __DIR__ . '/auth.php';
