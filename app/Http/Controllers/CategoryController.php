@@ -106,10 +106,6 @@ class CategoryController extends Controller
     {
         Category::find($id)->delete();
 
-        $notification = array(
-            'message' => 'kategori berhasil dihapus',
-            'alert-type' => 'success'
-        );
-        return redirect()->back()->with($notification);
+        return response()->json('Data berhasil dihapus', 200);
     }
 }

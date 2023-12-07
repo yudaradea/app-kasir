@@ -23,6 +23,11 @@ class ProductController extends Controller
                 ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('select_all', function($data){
+                    return '
+                    <input type="checkbox" name="id_produk[]" value="'. $data->id .'">
+                    ';
+                })
                 ->addColumn('harga_beli', function ($data) {
                     return "Rp" . format_uang($data->harga_beli);
                 })
@@ -38,7 +43,7 @@ class ProductController extends Controller
                          <button onclick="deleteData(`' . route('product.destroy', $data->id) . '`)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                         ';
                 })
-                ->rawColumns(['aksi'])
+                ->rawColumns(['aksi', 'select_all'])
                 ->make(true);
         }
 
@@ -133,10 +138,12 @@ class ProductController extends Controller
     {
         Product::find($id)->delete();
 
-        $notification = array(
-            'message' => 'kategori berhasil dihapus',
-            'alert-type' => 'success'
-        );
-        return redirect()->back()->with($notification);
+        return response()->json('Data berhasil dihapus', 200);
+
+        // $notification = array(
+        //     'message' => 'kategori berhasil dihapus',
+        //     'alert-type' => 'success'
+        // );
+        // return redirect()->back()->with($notification);
     }
 }

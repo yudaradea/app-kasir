@@ -23,14 +23,21 @@
                             <p style="font-size: 22px">List Product</p>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <button onclick="addForm('{{ route('product.store') }}')" class="btn btn-primary xs btn-flat"><i
-                                    class="fa fa-plus-circle" style="margin-right: 6px"></i>Tambah
-                                Product</button>
+                            <div class="btn-group">
+                                <button onclick="addForm('{{ route('product.store') }}')" class="btn btn-primary "><i
+                                        class="fa fa-plus-circle" style="margin-right: 4px"></i>Tambah
+                                    Product</button>
+
+                                <button onclick="hapusSelected('{{ route('product.store') }}')" class="btn btn-danger "
+                                    style="margin-left: 6px"><i class="fa fa-trash"
+                                        style="margin-right: 4px"></i>Hapus</button>
+                            </div>
                         </div>
                     </div>
                     <div class="box-body table-responsive">
                         <table class="table table-striped table-bordered" role="grid">
                             <thead class="text-center">
+                                <th><input type="checkbox" name="select_all" id="select_all"></th>
                                 <th width="5%">No</th>
                                 <th>Kode</th>
                                 <th>Nama</th>
@@ -83,6 +90,10 @@
             $(this).find('.errors').text('');
         })
 
+        $('#select_all').on('click', function() {
+            $(':checkbox').prop('checked', this.checked);
+        })
+
         $(function() {
             table = $('.table').DataTable({
                 processing: true,
@@ -92,11 +103,17 @@
                 columns: [
 
                     {
+                        data: 'select_all',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
                     },
+
                     {
                         data: 'kode_produk',
 
@@ -212,6 +229,24 @@
             $('#modal-form-delete form')[0].reset();
             $('#modal-form-delete form').attr('action', url);
 
+            $('#modal-form-delete').validator().on('submit', function(e) {
+                if (!e.preventDefault()) {
+                    $.ajax({
+                            url: $('#modal-form-delete form').attr('action'),
+                            type: 'DELETE',
+                            data: $('#modal-form-delete form').serialize()
+                        })
+                        .done((response) => {
+                            $('#modal-form-delete').modal('hide');
+                            table.ajax.reload();
+                            toastr.success(response);
+                        })
+                        .fail((errors) => {
+                            alert('gagal menghapus data')
+                            return;
+                        });
+                }
+            })
             $.get(url)
                 .done((response) => {
                     $('#modal-form-delete form [name=nama_produk]').text(response.nama_produk);

@@ -166,6 +166,24 @@
 
             $('#modal-form-delete form')[0].reset();
             $('#modal-form-delete form').attr('action', url);
+            $('#modal-form-delete').validator().on('submit', function(e) {
+                if (!e.preventDefault()) {
+                    $.ajax({
+                            url: $('#modal-form-delete form').attr('action'),
+                            type: 'DELETE',
+                            data: $('#modal-form-delete form').serialize()
+                        })
+                        .done((response) => {
+                            $('#modal-form-delete').modal('hide');
+                            table.ajax.reload();
+                            toastr.success(response);
+                        })
+                        .fail((errors) => {
+                            alert('Hapus data gagal, terdapat produk dalam kategori ini')
+                            return;
+                        });
+                }
+            })
 
             $.get(url)
                 .done((response) => {
