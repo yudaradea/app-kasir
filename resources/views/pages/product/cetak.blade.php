@@ -15,22 +15,22 @@
 </head>
 
 <body>
+    <h3 class="text-center" style="padding-bottom: 10px">Barcode {{ $produk->nama_produk }}</h3>
     <table width="100%">
         <tr>
-            @foreach ($dataProduk as $key => $produk)
+            @for ($no = 1; $no <= 72; $no++)
                 <td class="text-center" style="border: 1px solid #333;">
-                    <p style="font-size: 12px">{{ $produk->nama_produk }} -
-                        Rp{{ format_uang($produk->harga_jual) }}</p>
                     <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($produk->kode_produk, 'C39') }}"
-                        alt="barcode" width="180" height="60">
+                        alt="barcode" width="90" height="30" style="padding-top: 20px">
                     <br>
-                    {{ $produk->kode_produk }}
+                    <small style="font-size: 11px">{{ $produk->kode_produk }}</small>
                 </td>
-                @if (($key + 1) % 3 == 0)
+                @if ($no % 6 == 0)
         </tr>
         <tr>
             @endif
-            @endforeach
+            @endfor
+
         </tr>
     </table>
 </body>

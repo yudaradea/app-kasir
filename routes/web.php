@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserProfileController;
@@ -47,10 +48,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('/category/{id}', 'destroy')->name('category.destroy');
     });
 
-    Route::get('/product/data', [ProductController::class, 'data'])->name('produk-data');
+    // produk
     Route::post('/product/hapus-selected', [ProductController::class, 'hapusSelected'])->name('produk.hapus.selected');
-    Route::post('/product/cetak-barcode', [ProductController::class, 'cetakBarcode'])->name('produk.cetak.barcode');
+    Route::post('/product/cetak-barcode/{id}', [ProductController::class, 'cetakBarcode'])->name('produk.cetak.barcode');
     Route::resource('/product', ProductController::class);
+
+    // member
+    Route::post('/member/cetak-barcode/{id}', [MemberController::class, 'cetakBarcode'])->name('member.cetak.barcode');
+    Route::resource('/member', MemberController::class);
 });
 
 require __DIR__ . '/auth.php';

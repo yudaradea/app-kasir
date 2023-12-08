@@ -43,7 +43,8 @@ class ProductController extends Controller
                 })
                 ->addColumn('aksi', function ($data) {
                     return '
-                         <button type="button" onclick="editForm(`' . route('product.update', $data->id) . '`)" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></button>
+                         <button type="button" onclick="editForm(`' . route('product.update', $data->id) . '`)" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></button>
+                         <button type="button" onclick="cetakBarcode(`' . route('produk.cetak.barcode', $data->id) . '`)" class="btn btn-info btn-xs"><i class="fa fa-barcode"></i></button>
                          <button type="button" onclick="deleteData(`' . route('product.destroy', $data->id) . '`)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                         ';
                 })
@@ -161,17 +162,25 @@ class ProductController extends Controller
         return response()->json('Data berhasil dihapus', 200);
     }
 
-    public function cetakBarcode(Request $request)
+    public function cetakBarcode(Request $request, $id)
     {
-        $dataProduk = array();
 
-        foreach ($request->id_produk as $id) {
-            $produk = Product::find($id);
-            $dataProduk[] = $produk;
-        }
+        $produk = Product::find($id);
+        
 
-        $pdf = Pdf::loadView('pages.product.cetak', compact('dataProduk'));
+         $pdf = Pdf::loadView('pages.product.cetak', compact('produk'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('produk.pdf', array("Attachment" => false));
+        
+        // $dataProduk = array();
+
+        // foreach ($request->id_produk as $id) {
+        //     $produk = Product::find($id);
+        //     $dataProduk[] = $produk;
+        // }
+
+        // $pdf = Pdf::loadView('pages.product.cetak', compact('dataProduk'));
+        // $pdf->setPaper('a4', 'potrait');
+        // return $pdf->stream('produk.pdf', array("Attachment" => false));
     }
 }

@@ -19,13 +19,13 @@
                     <i class="fa fa-cube"></i> <span>Kategori</span>
                 </a>
             </li>
-            <li class="@if (request()->is('product')) ? active : '' @endif"">
+            <li class="@if (request()->is('product')) ? active : '' @endif">
                 <a href="{{ route('product.index') }}">
                     <i class="fa fa-cubes"></i> <span>Produk</span>
                 </a>
             </li>
-            <li class="">
-                <a href="#">
+            <li class="@if (request()->is('member')) ? active : '' @endif">
+                <a href="{{ route('member.index') }}">
                     <i class="fa fa-id-card"></i> <span>Member</span>
                 </a>
             </li>

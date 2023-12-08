@@ -4,12 +4,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Product
+            Member
             <small>Control panel</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">Product</li>
+            <li class="active">Member</li>
         </ol>
     </section>
 
@@ -20,18 +20,13 @@
                 <div class="box">
                     <div class="box-header with-border">
                         <div class="col-xs-6">
-                            <p style="font-size: 22px">List Product</p>
+                            <p style="font-size: 22px">List Member</p>
                         </div>
                         <div class="col-xs-6 text-right">
                             <div class="btn-group">
-                                <button onclick="addForm('{{ route('product.store') }}')" class="btn btn-primary "><i
+                                <button onclick="addForm('{{ route('member.store') }}')" class="btn btn-primary "><i
                                         class="fa fa-plus-circle" style="margin-right: 4px"></i>Tambah
-                                    Product</button>
-
-                                <button onclick="hapusSelected('{{ route('produk.hapus.selected') }}')"
-                                    class="btn btn-danger " style="margin-left: 6px"><i class="fa fa-trash"
-                                        style="margin-right: 4px"></i>Hapus
-                                    Selected</button>
+                                    Member</button>
                             </div>
                         </div>
                     </div>
@@ -41,16 +36,11 @@
                             @csrf
                             <table class="table table-striped table-bordered" role="grid">
                                 <thead class="text-center">
-                                    <th><input type="checkbox" name="select_all" id="select_all"></th>
                                     <th width="5%">No</th>
-                                    <th>Kode</th>
-                                    <th>Nama</th>
-                                    <th>Kategori</th>
-                                    <th>Merk</th>
-                                    <th>Harga Beli</th>
-                                    <th>Harga Jual</th>
-                                    <th>Diskon</th>
-                                    <th>Stok</th>
+                                    <th>Kode Member</th>
+                                    <th>Nama Member</th>
+                                    <th>Alamat</th>
+                                    <th>Telepon</th>
                                     <th width="10%">Aksi</th>
                                 </thead>
                                 <tbody></tbody>
@@ -64,7 +54,7 @@
     </section>
     <!-- /.content -->
 
-    @includeIf('pages.product.form')
+    @includeIf('pages.member.form')
 @endsection
 @push('style')
     <style>
@@ -107,15 +97,8 @@
                 processing: true,
                 serverSide: true,
                 autoWidth: false,
-                ajax: "{{ route('product.index') }}",
-                columns: [
-
-                    {
-                        data: 'select_all',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
+                ajax: "{{ route('member.index') }}",
+                columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         orderable: false,
@@ -123,36 +106,19 @@
                     },
 
                     {
-                        data: 'kode_produk',
+                        data: 'kode_member',
 
                     },
                     {
-                        data: 'nama_produk',
+                        data: 'nama',
 
                     },
                     {
-                        data: 'nama_kategori',
+                        data: 'alamat',
 
                     },
                     {
-                        data: 'merk',
-
-                    },
-
-                    {
-                        data: 'harga_beli',
-
-                    },
-                    {
-                        data: 'harga_jual',
-
-                    },
-                    {
-                        data: 'diskon',
-
-                    },
-                    {
-                        data: 'stok',
+                        data: 'telepon',
 
                     },
                     {
@@ -199,33 +165,29 @@
         // tambah produk
         function addForm(url) {
             $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Tambah Produk');
+            $('#modal-form .modal-title').text('Tambah Member');
 
             $('#modal-form form')[0].reset();
             $('#modal-form form').attr('action', url);
             $('#modal-form form [name=_method]').val('post');
-            $('#modal-form form [name=nama_produk]').focus();
+            $('#modal-form form [name=nama]').focus();
         }
 
         // Edit produk
         function editForm(url) {
             $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Edit Produk');
+            $('#modal-form .modal-title').text('Edit Member');
 
             $('#modal-form form')[0].reset();
             $('#modal-form form').attr('action', url);
             $('#modal-form [name=_method]').val('patch');
-            $('#modal-form form [name=nama_produk]').focus();
+            $('#modal-form form [name=nama]').focus();
 
             $.get(url)
                 .done((response) => {
-                    $('#modal-form form [name=nama_produk]').val(response.nama_produk);
-                    $('#modal-form form [name=id_kategory]').val(response.id_kategory);
-                    $('#modal-form form [name=merk]').val(response.merk);
-                    $('#modal-form form [name=harga_beli]').val(response.harga_beli);
-                    $('#modal-form form [name=harga_jual]').val(response.harga_jual);
-                    $('#modal-form form [name=diskon]').val(response.diskon);
-                    $('#modal-form form [name=stok]').val(response.stok);
+                    $('#modal-form form [name=nama]').val(response.nama);
+                    $('#modal-form form [name=alamat]').val(response.alamat);
+                    $('#modal-form form [name=telepon]').val(response.telepon);
 
                 })
                 .fail((errors) => {
@@ -260,46 +222,11 @@
             })
             $.get(url)
                 .done((response) => {
-                    $('#modal-form-delete form [name=nama_produk]').text(response.nama_produk);
+                    $('#modal-form-delete form [name=nama').text(response.nama);
                 })
                 .fail((errors) => {
                     alert('Tidak dapat menampilkan data');
                 })
-        }
-
-        function hapusSelected(url) {
-            if ($('input:checked').length >= 1) {
-                let dataTerpilih = $('[name="id_produk[]"]:checked').length;
-                $('#modal-form-delete-selected').modal('show');
-                $('#modal-form-delete-selected .modal-title').text('Hapus Kategori');
-
-                $('#modal-form-delete-selected form').attr('action', url);
-
-                $('#modal-form-delete-selected form [name=dataTerpilih]').text(dataTerpilih);
-
-                $('#modal-form-delete-selected').validator().on('submit', function(e) {
-                    if (!e.preventDefault()) {
-                        $.ajax({
-                                url: $('#modal-form-delete-selected form').attr('action'),
-                                type: 'post',
-                                data: $('.form-produk').serialize()
-                            })
-                            .done((response) => {
-                                $('#modal-form-delete-selected').modal('hide');
-                                table.ajax.reload();
-                                toastr.success(response);
-                                $('#select_all').prop('checked', false);
-                            })
-                            .fail((errors) => {
-                                alert('gagal menghapus data terpilih')
-                                return;
-                            });
-                    }
-                })
-            } else {
-                alert('pilih data yang akan dihapus');
-                return;
-            }
         }
 
         // cetak barcode
