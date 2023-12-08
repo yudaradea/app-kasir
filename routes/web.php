@@ -48,6 +48,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/product/data', [ProductController::class, 'data'])->name('produk-data');
+    Route::post('/product/hapus-selected', [ProductController::class, 'hapusSelected'])->name('produk.hapus.selected');
+    Route::post('/product/cetak-barcode', [ProductController::class, 'cetakBarcode'])->name('produk.cetak.barcode');
     Route::resource('/product', ProductController::class);
 });
 

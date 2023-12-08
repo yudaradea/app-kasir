@@ -28,29 +28,39 @@
                                         class="fa fa-plus-circle" style="margin-right: 4px"></i>Tambah
                                     Product</button>
 
-                                <button onclick="hapusSelected('{{ route('product.store') }}')" class="btn btn-danger "
-                                    style="margin-left: 6px"><i class="fa fa-trash"
-                                        style="margin-right: 4px"></i>Hapus</button>
+                                <button onclick="cetakBarcode('{{ route('produk.cetak.barcode') }}')"
+                                    class="btn btn-secondary " style="margin-left: 6px"><i class="fa fa-barcode"
+                                        style="margin-right: 4px"></i>Cetak barcode</button>
+
+                                <button onclick="hapusSelected('{{ route('produk.hapus.selected') }}')"
+                                    class="btn btn-danger " style="margin-left: 6px"><i class="fa fa-trash"
+                                        style="margin-right: 4px"></i>Hapus
+                                    Selected</button>
                             </div>
                         </div>
                     </div>
                     <div class="box-body table-responsive">
-                        <table class="table table-striped table-bordered" role="grid">
-                            <thead class="text-center">
-                                <th><input type="checkbox" name="select_all" id="select_all"></th>
-                                <th width="5%">No</th>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Kategori</th>
-                                <th>Merk</th>
-                                <th>Harga Beli</th>
-                                <th>Harga Jual</th>
-                                <th>Diskon</th>
-                                <th>Stok</th>
-                                <th width="10%">Aksi</th>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+
+                        <form action="" method="POST" class="form-produk">
+                            @csrf
+                            <table class="table table-striped table-bordered" role="grid">
+                                <thead class="text-center">
+                                    <th><input type="checkbox" name="select_all" id="select_all"></th>
+                                    <th width="5%">No</th>
+                                    <th>Kode</th>
+                                    <th>Nama</th>
+                                    <th>Kategori</th>
+                                    <th>Merk</th>
+                                    <th>Harga Beli</th>
+                                    <th>Harga Jual</th>
+                                    <th>Diskon</th>
+                                    <th>Stok</th>
+                                    <th width="10%">Aksi</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -85,14 +95,16 @@
     <script>
         let table;
 
+        // reset modal ketika di close
         $('#modal-form').on('hidden.bs.modal', function() {
             $(this).find('form').trigger('reset');
             $(this).find('.errors').text('');
         })
 
+        // checked all
         $('#select_all').on('click', function() {
             $(':checkbox').prop('checked', this.checked);
-        })
+        });
 
         $(function() {
             table = $('.table').DataTable({
@@ -184,9 +196,11 @@
                             return;
                         });
                 }
-            })
+            });
+
         });
 
+        // tambah produk
         function addForm(url) {
             $('#modal-form').modal('show');
             $('#modal-form .modal-title').text('Tambah Produk');
@@ -197,6 +211,7 @@
             $('#modal-form form [name=nama_produk]').focus();
         }
 
+        // Edit produk
         function editForm(url) {
             $('#modal-form').modal('show');
             $('#modal-form .modal-title').text('Edit Produk');
@@ -222,11 +237,11 @@
                 })
         }
 
+        // Hapus Product
         function deleteData(url) {
             $('#modal-form-delete').modal('show');
             $('#modal-form-delete .modal-title').text('Hapus Kategori');
 
-            $('#modal-form-delete form')[0].reset();
             $('#modal-form-delete form').attr('action', url);
 
             $('#modal-form-delete').validator().on('submit', function(e) {
@@ -254,6 +269,52 @@
                 .fail((errors) => {
                     alert('Tidak dapat menampilkan data');
                 })
+        }
+
+        function hapusSelected(url) {
+            if ($('input:checked').length >= 1) {
+                let dataTerpilih = $('[name="id_produk[]"]:checked').length;
+                $('#modal-form-delete-selected').modal('show');
+                $('#modal-form-delete-selected .modal-title').text('Hapus Kategori');
+
+                $('#modal-form-delete-selected form').attr('action', url);
+
+                $('#modal-form-delete-selected form [name=dataTerpilih]').text(dataTerpilih);
+
+                $('#modal-form-delete-selected').validator().on('submit', function(e) {
+                    if (!e.preventDefault()) {
+                        $.ajax({
+                                url: $('#modal-form-delete-selected form').attr('action'),
+                                type: 'post',
+                                data: $('.form-produk').serialize()
+                            })
+                            .done((response) => {
+                                $('#modal-form-delete-selected').modal('hide');
+                                table.ajax.reload();
+                                toastr.success(response);
+                                $('#select_all').prop('checked', false);
+                            })
+                            .fail((errors) => {
+                                alert('gagal menghapus data terpilih')
+                                return;
+                            });
+                    }
+                })
+            } else {
+                alert('pilih data yang akan dihapus');
+                return;
+            }
+        }
+
+        // cetak barcode
+        function cetakBarcode(url) {
+            if ($('input:checked').length < 1) {
+                alert('Pilih data yang akan dicetak')
+            } else if ($('input:checked').length < 3) {
+                alert('minimal pilih 3 produk')
+            } else {
+                $('.form-produk').attr('target', '_blank').attr('action', url).submit();
+            }
         }
     </script>
 @endpush

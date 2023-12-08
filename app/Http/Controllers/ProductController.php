@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Yajra\DataTables\DataTables;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProductController extends Controller
 {
@@ -23,9 +24,12 @@ class ProductController extends Controller
                 ->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('select_all', function($data){
+                ->addColumn('kode_produk', function ($data) {
+                    return '<span class="label label-success" style="font-size: 13px;">' . $data->kode_produk . '</span>';
+                })
+                ->addColumn('select_all', function ($data) {
                     return '
-                    <input type="checkbox" name="id_produk[]" value="'. $data->id .'">
+                    <input type="checkbox" name="id_produk[]" value="' . $data->id . '" >
                     ';
                 })
                 ->addColumn('harga_beli', function ($data) {
@@ -39,15 +43,16 @@ class ProductController extends Controller
                 })
                 ->addColumn('aksi', function ($data) {
                     return '
-                         <button onclick="editForm(`' . route('product.update', $data->id) . '`)" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></button>
-                         <button onclick="deleteData(`' . route('product.destroy', $data->id) . '`)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                         <button type="button" onclick="editForm(`' . route('product.update', $data->id) . '`)" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></button>
+                         <button type="button" onclick="deleteData(`' . route('product.destroy', $data->id) . '`)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                         ';
                 })
-                ->rawColumns(['aksi', 'select_all'])
+                ->rawColumns(['aksi', 'kode_produk', 'select_all'])
                 ->make(true);
         }
 
         $kategori = Category::all()->pluck('nama_kategori', 'id');
+
         return view('pages.product.index', compact('kategori'));
     }
 
@@ -145,5 +150,28 @@ class ProductController extends Controller
         //     'alert-type' => 'success'
         // );
         // return redirect()->back()->with($notification);
+    }
+
+    public function hapusSelected(Request $request)
+    {
+        foreach ($request->id_produk as $id) {
+            Product::find($id)->delete();
+        }
+
+        return response()->json('Data berhasil dihapus', 200);
+    }
+
+    public function cetakBarcode(Request $request)
+    {
+        $dataProduk = array();
+
+        foreach ($request->id_produk as $id) {
+            $produk = Product::find($id);
+            $dataProduk[] = $produk;
+        }
+
+        $pdf = Pdf::loadView('pages.product.cetak', compact('dataProduk'));
+        $pdf->setPaper('a4', 'potrait');
+        return $pdf->stream('produk.pdf', array("Attachment" => false));
     }
 }
